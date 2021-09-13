@@ -12,6 +12,8 @@ import { PosModule } from './pos/pos.module'
 import { UserModule } from './user/user.module'
 import { HomeComponent } from './home/home.component'
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component'
+import { AuthService } from './auth/auth.service'
+import { InMemoryAuthService } from './auth/auth.inmemory.service'
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, PageNotFoundComponent],
@@ -26,7 +28,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     PosModule,
     UserModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: AuthService,
+      useClass: InMemoryAuthService,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
