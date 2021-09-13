@@ -1,5 +1,6 @@
-import { IUser, IName, IPhone } from './user.interfaces'
 import { Role } from '../../auth/auth.enum'
+import { IName, IPhone, IUser } from './user.interfaces'
+
 export class User implements IUser {
   constructor(
     public _id = '',
