@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core'
-
-import { AuthService, IAuthStatus, IServerAuthResponse } from './auth.service'
 import { sign } from 'fake-jwt-sign'
 import { Observable, of, throwError } from 'rxjs'
 
-import { Role } from './auth.enum'
 import { User } from '../user/interfaces/user.class'
 import { PhoneType } from '../user/interfaces/user.interfaces'
+import { Role } from './auth.enum'
+import { AuthService, IAuthStatus, IServerAuthResponse } from './auth.service'
+
 @Injectable()
 export class InMemoryAuthService extends AuthService {
   private defaultUser = User.Build({

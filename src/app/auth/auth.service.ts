@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import decode from 'jwt-decode'
-import { BehaviorSubject, Observable, throwError } from 'rxjs'
+import { BehaviorSubject, Observable, pipe, throwError } from 'rxjs'
 import { catchError, filter, map, mergeMap, tap } from 'rxjs/operators'
 
 import { Role } from '../auth/auth.enum'
@@ -33,13 +33,22 @@ export interface IAuthService {
 export abstract class AuthService extends CacheService implements IAuthService {
   readonly authStatus$ = new BehaviorSubject<IAuthStatus>(defaultAuthStatus)
   readonly currentUser$ = new BehaviorSubject<IUser>(new User())
-
+  private getAndUpdateUserIfAuthenticated = pipe(
+    filter((status: IAuthStatus) => status.isAuthenticated),
+    mergeMap(() => this.getCurrentUser()),
+    map((user: User) => this.currentUser$.next(user)),
+    catchError(transformError)
+  )
+  protected readonly resumeCurrentUser$ = this.authStatus$.pipe(
+    this.getAndUpdateUserIfAuthenticated
+  )
   constructor() {
     super()
     if (this.hasExpiredToken()) {
       this.logout(true)
     } else {
       this.authStatus$.next(this.getAuthStatusFromToken())
+      setTimeout(() => this.resumeCurrentUser$.subscribe(), 0)
     }
   }
   // protected functions
@@ -75,14 +84,11 @@ export abstract class AuthService extends CacheService implements IAuthService {
     const loginResponse$ = this.authProvider(email, password).pipe(
       map((value) => {
         this.setToken(value.accessToken)
-        const token = decode(value.accessToken)
+        // const token = decode(value.accessToken)
         return this.getAuthStatusFromToken()
       }),
       tap((status) => this.authStatus$.next(status)),
-      filter((status: IAuthStatus) => status.isAuthenticated),
-      mergeMap(() => this.getCurrentUser()),
-      map((user) => this.currentUser$.next(user)),
-      catchError(transformError)
+      this.getAndUpdateUserIfAuthenticated
     )
     loginResponse$.subscribe({
       error: (err) => {
