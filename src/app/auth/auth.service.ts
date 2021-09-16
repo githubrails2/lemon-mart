@@ -36,8 +36,26 @@ export abstract class AuthService extends CacheService implements IAuthService {
 
   constructor() {
     super()
+    if (this.hasExpiredToken()) {
+      this.logout(true)
+    } else {
+      this.authStatus$.next(this.getAuthStatusFromToken())
+    }
   }
   // protected functions
+  protected getAuthStatusFromToken(): IAuthStatus {
+    return this.transformJwtToken(decode(this.getToken()))
+  }
+  protected hasExpiredToken(): boolean {
+    const jwt = this.getToken()
+
+    if (jwt) {
+      const payload = decode(jwt) as any
+      return Date.now() >= payload.exp * 1000
+    }
+    return true
+  }
+
   protected clearToken() {
     this.removeItem('jwt')
   }
@@ -58,7 +76,7 @@ export abstract class AuthService extends CacheService implements IAuthService {
       map((value) => {
         this.setToken(value.accessToken)
         const token = decode(value.accessToken)
-        return this.transformJwtToken(token)
+        return this.getAuthStatusFromToken()
       }),
       tap((status) => this.authStatus$.next(status)),
       filter((status: IAuthStatus) => status.isAuthenticated),
