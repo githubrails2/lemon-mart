@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { combineLatest } from 'rxjs'
 import { filter, tap } from 'rxjs/operators'
@@ -10,10 +10,10 @@ import { AuthService } from '../auth/auth.service'
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
+  displayLogin = true
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
   login() {
     this.authService.login('manager@test.com', '12345678')
     combineLatest([this.authService.authStatus$, this.authService.currentUser$])
