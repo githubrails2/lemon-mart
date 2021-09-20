@@ -1,13 +1,16 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" *ngIf="{ status: authService.authStatus$ | async,
+                                    user: authService.currentUser$ | async} as auth;">
   <a mat-button routerLink="/home">
     <h1>LemonMart</h1>
   </a>
   <span class="flex-spacer"></span>
-  <button mat-mini-fab routerLink="/user/profile" matTooltip="Profile"
+  <button *ngIf="auth?.status?.isAuthenticated" mat-mini-fab routerLink="/user/profile" matTooltip="Profile"
     aria-label="User Profile">
-    <mat-icon>account_circles</mat-icon>
+    <img *ngIf="auth?.user?.picture" class="image-cropper" [src]="auth?.user?.picture"/>
+
+    <mat-icon *ngIf="!auth?.user?.picture">account_circle</mat-icon>
   </button>
-  <button mat-mini-fab routerLink="/user/logout" matTooltip="Logout" aria-label="Logout">
+  <button *ngIf="auth?.status?.isAuthenticated"mat-mini-fab routerLink="/user/logout" matTooltip="Logout" aria-label="Logout">
     <mat-icon>lock_open</mat-icon>
   </button>
 

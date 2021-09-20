@@ -81,10 +81,12 @@ export abstract class AuthService extends CacheService implements IAuthService {
 
   login(email: string, password: string): Observable<void> {
     this.clearToken()
+
     const loginResponse$ = this.authProvider(email, password).pipe(
       map((value) => {
         this.setToken(value.accessToken)
         // const token = decode(value.accessToken)
+
         return this.getAuthStatusFromToken()
       }),
       tap((status) => this.authStatus$.next(status)),

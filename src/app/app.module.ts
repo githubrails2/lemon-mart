@@ -10,6 +10,7 @@ import { AppComponent } from './app.component'
 import { AuthHttpInterceptor } from './auth/auth-http-interceptor'
 import { InMemoryAuthService } from './auth/auth.inmemory.service'
 import { AuthService } from './auth/auth.service'
+import { SimpleDialogComponent } from './common/simple-dialog.component'
 import { HomeComponent } from './home/home.component'
 import { InventoryModule } from './inventory/inventory.module'
 import { LoginComponent } from './login/login.component'
@@ -19,7 +20,13 @@ import { PosModule } from './pos/pos.module'
 import { UserModule } from './user/user.module'
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, PageNotFoundComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    LoginComponent,
+    SimpleDialogComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -43,5 +50,6 @@ import { UserModule } from './user/user.module'
     },
   ],
   bootstrap: [AppComponent],
+  entryComponents: [SimpleDialogComponent],
 })
 export class AppModule {}

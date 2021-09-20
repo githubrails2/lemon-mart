@@ -6,6 +6,8 @@ import { catchError, filter, tap } from 'rxjs/operators'
 import { SubSink } from 'subsink'
 
 import { AuthService } from '../auth/auth.service'
+import { UiService } from '../common/ui.service'
+import { EmailValidation, PasswordValidation } from '../common/validations'
 
 @Component({
   selector: 'app-login',
@@ -14,10 +16,9 @@ import { AuthService } from '../auth/auth.service'
 })
 export class LoginComponent implements OnInit {
   private subs = new SubSink()
-  loginForm: FormGroup = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl(''),
-  })
+
+  loginForm!: FormGroup
+
   loginError = ''
   redirectUrl: string | undefined
 
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private uiService: UiService
   ) {
     this.subs.sink = route.paramMap.subscribe(
       (params) => (this.redirectUrl = params.get('redirectUrl') ?? '')
@@ -38,11 +40,8 @@ export class LoginComponent implements OnInit {
   }
   buildLoginForm() {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [Validators.required, Validators.minLength(8), Validators.maxLength(50)],
-      ],
+      email: ['', EmailValidation],
+      password: ['', PasswordValidation],
     })
   }
   async login(submittedForm: FormGroup) {
@@ -56,6 +55,7 @@ export class LoginComponent implements OnInit {
       .pipe(
         filter(([authStatus, user]) => authStatus.isAuthenticated && user?._id !== ''),
         tap(([authStatus, user]) => {
+          this.uiService.showToast(`Welcome ${user.fullName}! Role: ${user.role}`)
           this.router.navigate([this.redirectUrl || '/manager'])
         })
       )

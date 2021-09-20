@@ -1,3 +1,4 @@
+import { validateHorizontalPosition } from '@angular/cdk/overlay'
 import { Injectable } from '@angular/core'
 import { sign } from 'fake-jwt-sign'
 import { Observable, of, throwError } from 'rxjs'
@@ -34,6 +35,7 @@ export class InMemoryAuthService extends AuthService {
   })
   constructor() {
     super()
+
     console.warn(
       "You're using the InMemoryAuthService. Do not use this service in production"
     )
@@ -58,7 +60,7 @@ export class InMemoryAuthService extends AuthService {
         ? Role.Manager
         : Role.None,
     } as IAuthStatus
-    this.defaultUser.role = authStatus.userRole
+
     const authResponse = {
       accessToken: sign(authStatus, 'secret', {
         expiresIn: '1h',
