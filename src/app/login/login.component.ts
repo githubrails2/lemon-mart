@@ -56,6 +56,7 @@ export class LoginComponent implements OnInit {
         filter(([authStatus, user]) => authStatus.isAuthenticated && user?._id !== ''),
         tap(([authStatus, user]) => {
           this.uiService.showToast(`Welcome ${user.fullName}! Role: ${user.role}`)
+
           this.router.navigate([this.redirectUrl || '/manager'])
         })
       )
