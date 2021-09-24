@@ -4,15 +4,15 @@
 
 export const environment = {
   production: false,
-firebaseConfig = {
-  apiKey: "AIzaSyCouq2IGi1yIG4uQgpEEPjGF5nCz_FN7yI",
-  authDomain: "lemon-mart-1f7d1.firebaseapp.com",
-  projectId: "lemon-mart-1f7d1",
-  storageBucket: "lemon-mart-1f7d1.appspot.com",
-  messagingSenderId: "129317349614",
-  appId: "1:129317349614:web:14dba4f1b76fb24810ebff",
-  measurementId: "G-GZ9EMZT2X6"
-};  
+  firebaseConfig: {
+    apiKey: 'AIzaSyCouq2IGi1yIG4uQgpEEPjGF5nCz_FN7yI',
+    authDomain: 'lemon-mart-1f7d1.firebaseapp.com',
+    projectId: 'lemon-mart-1f7d1',
+    storageBucket: 'lemon-mart-1f7d1.appspot.com',
+    messagingSenderId: '129317349614',
+    appId: '1:129317349614:web:14dba4f1b76fb24810ebff',
+    measurementId: 'G-GZ9EMZT2X6',
+  },
 }
 
 /*
@@ -23,4 +23,3 @@ firebaseConfig = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
-
