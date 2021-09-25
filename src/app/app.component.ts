@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MediaObserver } from '@angular/flex-layout'
-import { combineLatest, pipe } from 'rxjs'
+import { combineLatest } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { SubSink } from 'subsink'
 

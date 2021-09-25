@@ -1,7 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app'
-// import { AngularFireAuthModule } from '@angular/fire/auth'
+import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { ReactiveFormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
@@ -11,8 +11,7 @@ import { environment } from '../environments/environment'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { AuthHttpInterceptor } from './auth/auth-http-interceptor'
-import { FirebaseAuthService } from './auth/auth.firebase.service'
-// import { InMemoryAuthService } from './auth/auth.inmemory.service'
+import { authFactory } from './auth/auth.factory'
 import { AuthService } from './auth/auth.service'
 import { SimpleDialogComponent } from './common/simple-dialog.component'
 import { HomeComponent } from './home/home.component'
@@ -48,7 +47,8 @@ import { UserModule } from './user/user.module'
   providers: [
     {
       provide: AuthService,
-      useClass: FirebaseAuthService,
+      useFactory: authFactory,
+      deps: [AngularFireAuth],
     },
     {
       provide: HTTP_INTERCEPTORS,
